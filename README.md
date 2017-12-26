@@ -1,2 +1,81 @@
-# docker-nginx-cron-git
+# An Nginx GIT-website Docker image
+
+[![Docker Stars](https://img.shields.io/docker/stars/martinvw/nginx-cron-git.svg)](https://hub.docker.com/r/martinvw/nginx-cron-git/)  [![Docker Pulls](https://img.shields.io/docker/pulls/martinvw/nginx-cron-git.svg)](https://hub.docker.com/r/martinvw/nginx-cron-git/)  [![Docker Automated buil](https://img.shields.io/docker/automated/martinvw/nginx-cron-git.svg)](https://hub.docker.com/r/martinvw/nginx-cron-git/)  ![GitHub forks](https://img.shields.io/github/forks/martinvw/docker-nginx-cron-git.svg?style=social&label=Fork) ![GitHub stars](https://img.shields.io/github/stars/martinvw/docker-nginx-cron-git.svg?style=social&label=Star)
+
 Nginx docker which periodically update from a remote git location
+
+## Supported tags and respective ```Dockerfile``` links
+
+* latest ([Dockerfile](https://raw.githubusercontent.com/martinvw/docker-nginx-cron-git/master/Dockerfile))
+
+This image is updated via pull requests to the [martinvw/docker-nginx-cron-git](https://github.com/martinvw/docker-nginx-cron-git) GitHub repo.
+
+## What is this Nginx GIT-website Docker image
+
+Nginx docker which periodically update from a remote git location
+
+## How to use the image (command line)
+
+> $ docker run --name nginx-cron-git -d -e GIT\_CLONE\_URI="https://github.com/martinvw/resume.git" martinvw/nginx-cron-git
+
+### Exposing the port
+
+If you don't use another docker to the SSL offloading then you might want to expose the port:
+
+> $ docker run --name nginx-cron-git -d -p -e GIT\_CLONE\_URI="https://github.com/martinvw/resume.git" 80:80 nginx-cron-git
+
+Then you can hit http://localhost or http://host-ip in your browser.
+
+## Using Docker-compose
+
+Create the following ```docker-compose.yml``` and start the container with ```docker-compose up -d```
+
+```
+version: "3"
+
+services:
+   nginx:
+      image: martinvw/nginx-cron-git
+      restart: always
+      environment:
+        GIT_CLONE_URI: ssh://git@gitlab:22/martinvw/resume.git
+        WEBSITE_DIRECTORY: Website
+        FORCE_ACCEPT_SSH_KOST_KEY: gitlab_web_1.nginx-proxy
+        VIRTUAL_HOST: martinvw.nl
+        LETSENCRYPT_HOST: martinvw.nl
+        LETSENCRYPT_EMAIL: admin@martinvw.nl
+      volumes:
+       - ./restricted_rsa.pub:/root/.ssh/id_rsa.pub
+       - ./restricted_rsa:/root/.ssh/id_rsa
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
+```
+
+Used together with [jwilder/nginx-proxy](https://hub.docker.com/r/jwilder/nginx-proxy) and [jrcs/letsencrypt-nginx-proxy-companion](https://hub.docker.com/r/jrcs/letsencrypt-nginx-proxy-companion).
+
+## Supported Docker versions
+
+This image is officially supported on Docker version 1.13.1.
+
+Support for older versions (down to 1.6) is provided on a best-effort basis.
+
+## User Feedback
+
+### Issues
+
+If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/martinvw/docker-nginx-cron-git/issues).
+
+### Contributing
+
+You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
+
+Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/martinvw/docker-nginx-cron-git/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
+
+## Documentation
+
+## License
+
+When not explicitly set, files are placed under [![License MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
