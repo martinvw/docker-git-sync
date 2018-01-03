@@ -1,14 +1,14 @@
 # An Nginx GIT-website Docker image
 
-[![Docker Stars](https://img.shields.io/docker/stars/martinvw/nginx-cron-git.svg)](https://hub.docker.com/r/martinvw/nginx-cron-git/)  [![Docker Pulls](https://img.shields.io/docker/pulls/martinvw/nginx-cron-git.svg)](https://hub.docker.com/r/martinvw/nginx-cron-git/)  [![Docker Automated buil](https://img.shields.io/docker/automated/martinvw/nginx-cron-git.svg)](https://hub.docker.com/r/martinvw/nginx-cron-git/)  ![GitHub forks](https://img.shields.io/github/forks/martinvw/docker-nginx-cron-git.svg?style=social&label=Fork) ![GitHub stars](https://img.shields.io/github/stars/martinvw/docker-nginx-cron-git.svg?style=social&label=Star)
+[![Docker Stars](https://img.shields.io/docker/stars/martinvw/git-sync.svg)](https://hub.docker.com/r/martinvw/git-sync/)  [![Docker Pulls](https://img.shields.io/docker/pulls/martinvw/git-sync.svg)](https://hub.docker.com/r/martinvw/git-sync/)  [![Docker Automated buil](https://img.shields.io/docker/automated/martinvw/git-sync.svg)](https://hub.docker.com/r/martinvw/git-sync/)  ![GitHub forks](https://img.shields.io/github/forks/martinvw/docker-git-sync.svg?style=social&label=Fork) ![GitHub stars](https://img.shields.io/github/stars/martinvw/docker-git-sync.svg?style=social&label=Star)
 
 Nginx docker which periodically update from a remote git location
 
 ## Supported tags and respective ```Dockerfile``` links
 
-* latest ([Dockerfile](https://raw.githubusercontent.com/martinvw/docker-nginx-cron-git/master/Dockerfile))
+* latest ([Dockerfile](https://raw.githubusercontent.com/martinvw/docker-git-sync/master/Dockerfile))
 
-This image is updated via pull requests to the [martinvw/docker-nginx-cron-git](https://github.com/martinvw/docker-nginx-cron-git) GitHub repo.
+This image is updated via pull requests to the [martinvw/docker-git-sync](https://github.com/martinvw/docker-git-sync) GitHub repo.
 
 ## What is this Nginx GIT-website Docker image
 
@@ -16,13 +16,13 @@ Nginx docker which periodically update from a remote git location
 
 ## How to use the image (command line)
 
-> $ docker run --name nginx-cron-git -d -e GIT\_CLONE\_URI="https://github.com/martinvw/resume.git" martinvw/nginx-cron-git
+> $ docker run --name git-sync -d -e GIT\_CLONE\_URI="https://github.com/martinvw/resume.git" martinvw/git-sync
 
 ### Exposing the port
 
 If you don't use another docker to the SSL offloading then you might want to expose the port:
 
-> $ docker run --name nginx-cron-git -d -p -e GIT\_CLONE\_URI="https://github.com/martinvw/resume.git" 80:80 nginx-cron-git
+> $ docker run --name git-sync -d -p -e GIT\_CLONE\_URI="https://github.com/martinvw/resume.git" 80:80 git-sync
 
 Then you can hit http://localhost or http://host-ip in your browser.
 
@@ -34,19 +34,22 @@ Create the following ```docker-compose.yml``` and start the container with ```do
 version: "3"
 
 services:
-   nginx:
-      image: martinvw/nginx-cron-git
+   gitsync:
+      image: martinvw/git-sync
       restart: always
       environment:
-        GIT_CLONE_URI: ssh://git@gitlab:22/martinvw/resume.git
-        WEBSITE_DIRECTORY: Website
-        FORCE_ACCEPT_SSH_KOST_KEY: gitlab_web_1.nginx-proxy
-        VIRTUAL_HOST: martinvw.nl
-        LETSENCRYPT_HOST: martinvw.nl
-        LETSENCRYPT_EMAIL: admin@martinvw.nl
+        GIT_SYNC_REPO: ssh://git@gitlab:22/martinvw/resume.git
+        GIT_SYNC_FORCE_ACCEPT_SSH_KOST_KEY: gitlab_web_1.nginx-proxy
+        GIT_SYNC_BRANCH: master
+        GIT_SYNC_RELATIVE_DIRECTORY: Website
       volumes:
        - ./restricted_rsa.pub:/root/.ssh/id_rsa.pub
        - ./restricted_rsa:/root/.ssh/id_rsa
+       - website_sources:/git:z
+
+volumes:
+  website_sources:
+    driver: local
 
 networks:
   default:
@@ -66,13 +69,13 @@ Support for older versions (down to 1.6) is provided on a best-effort basis.
 
 ### Issues
 
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/martinvw/docker-nginx-cron-git/issues).
+If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/martinvw/docker-git-sync/issues).
 
 ### Contributing
 
 You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
 
-Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/martinvw/docker-nginx-cron-git/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
+Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/martinvw/docker-git-sync/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
 
 ## Documentation
 
