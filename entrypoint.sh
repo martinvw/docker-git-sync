@@ -1,32 +1,26 @@
-#!/bin/bash -x
-
-# start the cron deamon
-cron
+#!/bin/sh
 
 # should we do our start up things
-if [ ! -d "/opt/git_repo" ]; then
+if [ ! -d "/git/.git" ]; then
 
-  if [ -n "$FORCE_ACCEPT_SSH_KOST_KEY" ]; then
-    ssh-keyscan $FORCE_ACCEPT_SSH_KOST_KEY >> ~/.ssh/known_hosts
+  if [ -n "$GIT_SYNC_FORCE_ACCEPT_SSH_KOST_KEY" ]; then
+    ssh-keyscan $GIT_SYNC_FORCE_ACCEPT_SSH_KOST_KEY >> ~/.ssh/known_hosts
   fi
 
-  # do the initial checkout
-  git clone $GIT_CLONE_URI /opt/git_repo
-
-  # rm the default nginx folder
-  rm -rf /usr/share/nginx/html
+  # perform a sparse checkout
+  cd /git
+  git init
+  git remote add origin $GIT_SYNC_REPO
+  git fetch
+  git reset --hard origin/master
+  #git pull origin master
 
   # did the user pass a directory inside the GIT repo?
-  if [ -n "$WEBSITE_DIRECTORY" ]; then
-    # create the symlink to the website directory
-    ln -s "/opt/git_repo/$WEBSITE_DIRECTORY" /usr/share/nginx/html
+  if [ -n "$GIT_SYNC_RELATIVE_DIRECTORY" ]; then
+    # request sparse checkout
+    ln -s "/git/$GIT_SYNC_RELATIVE_DIRECTORY" /export
   fi
 
-  # no directory was passed
-  if [ -z "$WEBSITE_DIRECTORY" ]; then
-    # create the symlink to the root of the GIT repo
-    ln -s /opt/git_repo /usr/share/nginx/html
-  fi
 fi
 
 exec "$@"

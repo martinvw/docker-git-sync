@@ -1,15 +1,13 @@
-FROM nginx
+FROM alpine 
 
-RUN apt-get update && apt-get install -qq -y \
-  cron \
-  git \
-  && rm -rf /var/lib/apt/lists/*
+VOLUME ["/git", "/export"]
 
-COPY update_repo.bash /etc/cron.hourly/
-RUN chmod +x /etc/cron.hourly/update_repo.bash
+RUN apk add --no-cache git openssh-client
+
+COPY update_repo.sh /etc/periodic/15min/
+RUN chmod +x /etc/periodic/15min/update_repo.sh
 
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
-
+CMD ["crond", "-f"]
