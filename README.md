@@ -41,7 +41,6 @@ services:
         GIT_SYNC_REPO: ssh://git@gitlab:22/martinvw/resume.git
         GIT_SYNC_FORCE_ACCEPT_SSH_KOST_KEY: gitlab_web_1.nginx-proxy
         GIT_SYNC_BRANCH: master
-        GIT_SYNC_RELATIVE_DIRECTORY: Website
       volumes:
        - ./restricted_rsa.pub:/root/.ssh/id_rsa.pub
        - ./restricted_rsa:/root/.ssh/id_rsa

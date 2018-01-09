@@ -13,13 +13,6 @@ if [ ! -d "/git/.git" ]; then
   git remote add origin $GIT_SYNC_REPO
   git fetch
   git reset --hard origin/master
-  #git pull origin master
-
-  # did the user pass a directory inside the GIT repo?
-  if [ -n "$GIT_SYNC_RELATIVE_DIRECTORY" ]; then
-    # request sparse checkout
-    ln -s "/git/$GIT_SYNC_RELATIVE_DIRECTORY" /export
-  fi
 
 fi
 

@@ -1,2 +1,2 @@
 #!/bin/sh
-cd /opt/git_repo && /usr/bin/git pull origin
+cd /git && /usr/bin/git pull origin
