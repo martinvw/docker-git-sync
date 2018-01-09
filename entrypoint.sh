@@ -16,4 +16,6 @@ if [ ! -d "/git/.git" ]; then
 
 fi
 
+/etc/periodic/15min/update_repo.sh
+
 exec "$@"
