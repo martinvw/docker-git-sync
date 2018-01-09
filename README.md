@@ -1,8 +1,8 @@
-# An Nginx GIT-website Docker image
+# An GIT-sync Docker image
 
 [![Docker Stars](https://img.shields.io/docker/stars/martinvw/git-sync.svg)](https://hub.docker.com/r/martinvw/git-sync/)  [![Docker Pulls](https://img.shields.io/docker/pulls/martinvw/git-sync.svg)](https://hub.docker.com/r/martinvw/git-sync/)  [![Docker Automated buil](https://img.shields.io/docker/automated/martinvw/git-sync.svg)](https://hub.docker.com/r/martinvw/git-sync/)  ![GitHub forks](https://img.shields.io/github/forks/martinvw/docker-git-sync.svg?style=social&label=Fork) ![GitHub stars](https://img.shields.io/github/stars/martinvw/docker-git-sync.svg?style=social&label=Star)
 
-Nginx docker which periodically update from a remote git location
+Docker which periodically updates from a remote git location
 
 ## Supported tags and respective ```Dockerfile``` links
 
@@ -10,21 +10,13 @@ Nginx docker which periodically update from a remote git location
 
 This image is updated via pull requests to the [martinvw/docker-git-sync](https://github.com/martinvw/docker-git-sync) GitHub repo.
 
-## What is this Nginx GIT-website Docker image
+## What is this GIT-sync Docker image
 
-Nginx docker which periodically update from a remote git location
+It's just a docker which periodically updates from a remote git location
 
 ## How to use the image (command line)
 
-> $ docker run --name git-sync -d -e GIT\_CLONE\_URI="https://github.com/martinvw/resume.git" martinvw/git-sync
-
-### Exposing the port
-
-If you don't use another docker to the SSL offloading then you might want to expose the port:
-
-> $ docker run --name git-sync -d -p -e GIT\_CLONE\_URI="https://github.com/martinvw/resume.git" 80:80 git-sync
-
-Then you can hit http://localhost or http://host-ip in your browser.
+> $ docker run --name git-sync -d -e GIT\_SYNC\_REPO="https://github.com/martinvw/resume.git" martinvw/git-sync
 
 ## Using Docker-compose
 
@@ -40,11 +32,19 @@ services:
       environment:
         GIT_SYNC_REPO: ssh://git@gitlab:22/martinvw/resume.git
         GIT_SYNC_FORCE_ACCEPT_SSH_KOST_KEY: gitlab_web_1.nginx-proxy
-        GIT_SYNC_BRANCH: master
+       volumes:
+         - 'website_sources:/git/Website:z'
+         - './restricted_rsa.pub:/root/.ssh/id_rsa.pub'
+         - './restricted_rsa:/root/.ssh/id_rsa'
+       restart: always
+   
+   nginx:
+      image: 'nginx:latest'
+      depends_on:
+       - gitsync
       volumes:
-       - ./restricted_rsa.pub:/root/.ssh/id_rsa.pub
-       - ./restricted_rsa:/root/.ssh/id_rsa
-       - website_sources:/git:z
+       - 'website_sources:/usr/share/nginx/html:ro'
+      restart: always
 
 volumes:
   website_sources:
