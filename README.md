@@ -31,7 +31,8 @@ services:
       restart: always
       environment:
         GIT_SYNC_REPO: ssh://git@gitlab:22/martinvw/resume.git
-        GIT_SYNC_FORCE_ACCEPT_SSH_KOST_KEY: gitlab_web_1.nginx-proxy
+        GIT_SYNC_FORCE_ACCEPT_SSH_HOST_KEY: gitlab_web_1.nginx-proxy
+        GIT_SYNC_FORCE_ACCEPT_SSH_PORT_KEY: 22_
        volumes:
          - 'website_sources:/git/Website:z'
          - './restricted_rsa.pub:/root/.ssh/id_rsa.pub'

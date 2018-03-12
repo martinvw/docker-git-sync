@@ -3,8 +3,8 @@
 # should we do our start up things
 if [ ! -d "/git/.git" ]; then
 
-  if [ -n "$GIT_SYNC_FORCE_ACCEPT_SSH_KOST_KEY" ]; then
-    ssh-keyscan $GIT_SYNC_FORCE_ACCEPT_SSH_KOST_KEY >> ~/.ssh/known_hosts
+  if [ -n "$GIT_SYNC_FORCE_ACCEPT_SSH_HOST_KEY" ]; then
+    ssh-keyscan $GIT_SYNC_FORCE_ACCEPT_SSH_HOST_KEY -p $GIT_SYNC_FORCE_ACCEPT_SSH_PORT_KEY >> ~/.ssh/known_hosts
   fi
 
   # perform a sparse checkout
