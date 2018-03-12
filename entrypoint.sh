@@ -4,7 +4,7 @@
 if [ ! -d "/git/.git" ]; then
 
   if [ -n "$GIT_SYNC_FORCE_ACCEPT_SSH_HOST_KEY" ]; then
-    ssh-keyscan $GIT_SYNC_FORCE_ACCEPT_SSH_HOST_KEY -p $GIT_SYNC_FORCE_ACCEPT_SSH_PORT_KEY >> ~/.ssh/known_hosts
+    ssh-keyscan -p $GIT_SYNC_FORCE_ACCEPT_SSH_PORT_KEY $GIT_SYNC_FORCE_ACCEPT_SSH_HOST_KEY >> ~/.ssh/known_hosts
   fi
 
   # perform a sparse checkout
