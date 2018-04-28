@@ -1,5 +1,5 @@
 #!/bin/sh
 cd /git && \
   /usr/bin git pull origin master | \
-  grep -qv "Already up to date." && \
+  grep -q "origin/master" && \
   run-parts /etc/after/pull
