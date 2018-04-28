@@ -1,5 +1,5 @@
 #!/bin/sh
 cd /git && \
-  /usr/bin/git pull origin master | \
+  /usr/bin/git pull origin master 2>&1 | \
   grep -q "origin/master" && \
   run-parts /etc/after/pull
