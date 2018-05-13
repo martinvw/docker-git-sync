@@ -16,7 +16,7 @@ if [ ! -d "/git/.git" ]; then
   git remote add origin $GIT_SYNC_REPO
   git fetch
   git reset --hard origin/master
-
+  run-parts /etc/after/pull
 fi
 
 /etc/periodic/15min/update_repo
